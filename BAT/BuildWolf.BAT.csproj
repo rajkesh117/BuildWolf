@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.28" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildFox.Modules\BuildWolf.Modules.csproj" />
+    <ProjectReference Include="..\BuildWolf.Modules\BuildWolf.Modules.csproj" />
+    <ProjectReference Include="..\DAT\BuildWolf.DAT.csproj" />
+  </ItemGroup>
+
+</Project>

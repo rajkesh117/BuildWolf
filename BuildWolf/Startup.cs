@@ -37,9 +37,22 @@ namespace BuildWolf
             //services.AddTransient(x =>new SqlConnection(Configuration.GetConnectionString(_connectionString)));
 
             services.AddScoped<IMasterService, MasterService>();
+            services.AddScoped<IUserDataService, UserDataService>();
+            services.AddScoped<IUserService, UserService>();
             //services.Configure(options => services.);
             services.AddControllers();
             services.AddSwaggerGen();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularDev",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200") // Change this to your Angular app URL
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +75,8 @@ namespace BuildWolf
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("AllowAngularDev");
 
             app.UseAuthorization();
 

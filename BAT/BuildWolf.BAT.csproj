@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BuildFox.Modules\BuildWolf.Modules.csproj" />
     <ProjectReference Include="..\BuildWolf.Modules\BuildWolf.Modules.csproj" />
     <ProjectReference Include="..\DAT\BuildWolf.DAT.csproj" />
   </ItemGroup>

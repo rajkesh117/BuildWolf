@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BAT\BuildWolf.BAT.csproj" />
-    <ProjectReference Include="..\BuildFox.Modules\BuildWolf.Modules.csproj" />
     <ProjectReference Include="..\BuildWolf.Modules\BuildWolf.Modules.csproj" />
     <ProjectReference Include="..\DAT\BuildWolf.DAT.csproj" />
   </ItemGroup>

@@ -25,5 +25,13 @@ namespace BuildWolf.BAT.Interfaces
         public Task<Fees> UpdateFees(Fees fees);
         public Task<bool> DeleteFees(Guid Id);
         public Task<IEnumerable<LocationsViewModel>> GetAllMasterData();
+
+        //------ for Architect
+
+        public Task<bool> CreateArchitect(Architect architect);
+        public Task<IEnumerable<Architect>> GetAllArchitect();
+
+        public Task<bool> CreateServices(ServicesOffered services);
+        public Task<IEnumerable<ServicesOffered>> GetAllServices();
     }
 }

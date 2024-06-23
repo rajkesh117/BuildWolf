@@ -239,5 +239,65 @@ namespace BuildWolf.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
+
+        [Route("CreateArchitect")]
+        [HttpPost]
+        public async Task<IActionResult> CreateArchitect(Architect architect)
+        {
+            try
+            {
+                var res = await _masterService.CreateArchitect(architect);
+                return StatusCode(200, res);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Route("GetAllArchitect")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllArchitect()
+        {
+            try
+            {
+                var res = await _masterService.GetAllArchitect();
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Route("CreateServices")]
+        [HttpPost]
+        public async Task<IActionResult> CreateServices(ServicesOffered services)
+        {
+            try
+            {
+                var res = await _masterService.CreateServices(services);
+                return StatusCode(200, res);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Route("GetAllServices")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllServices()
+        {
+            try
+            {
+                var res = await _masterService.GetAllServices();
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
 }

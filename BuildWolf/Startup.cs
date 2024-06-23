@@ -38,7 +38,10 @@ namespace BuildWolf
 
             services.AddScoped<IMasterService, MasterService>();
             services.AddScoped<IUserDataService, UserDataService>();
+            services.AddScoped<IServiceProviderSurveyData, ServiceProviderSurveyData>();
+            services.AddScoped<IUserLocationData, UserLocationData>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISearchedUserPage, SearchedUserPage>();
             //services.Configure(options => services.);
             services.AddControllers();
             services.AddSwaggerGen();

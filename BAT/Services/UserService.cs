@@ -18,7 +18,7 @@ namespace BuildWolf.BAT.Services
 			_userDataService = userDataService;
 		}
 
-		public async Task<bool> CreateUser(Users user)
+		public async Task<Users> CreateUser(Users user)
 		{
 			var success =  await _userDataService.CreateUser(user);
 			return success;
@@ -46,7 +46,8 @@ namespace BuildWolf.BAT.Services
 
 		public async Task<Users> UpdateUser(Users user)
 		{
-			throw new NotImplementedException();
-		}
+			return await _userDataService.UpdateUser(user);
+
+        }
 	}
 }

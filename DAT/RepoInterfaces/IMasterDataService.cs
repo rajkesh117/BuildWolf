@@ -23,5 +23,11 @@ namespace BuildWolf.DAT.RepoInterfaces
         public Task<Fees> UpdateFees(Fees fees);
         public Task<bool> DeleteFees(Guid id);
         public Task<IEnumerable<LocationsViewModel>> GetAllMasterData();
+
+        public Task<bool> CreateArchitect(Architect architect);
+        public Task<IEnumerable<Architect>> GetAllArchitect();
+
+        public Task<bool> CreateServices(ServicesOffered services);
+        public Task<IEnumerable<ServicesOffered>> GetAllServices();
     }
 }

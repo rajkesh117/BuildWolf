@@ -2,6 +2,8 @@
 using BuildWolf.DAT.RepoInterfaces;
 using BuildWolf.Modules.MasterModules;
 using Dapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -251,6 +253,74 @@ namespace BuildWolf.DAT.RepoServices
                 }
             }
             return res;
+        }
+
+        public async Task<bool> CreateArchitect(Architect architect)
+        {
+            var res = false;
+            architect.ArchitectId = Guid.NewGuid().ToString();
+            architect.CreatedBy = Guid.NewGuid().ToString();
+            architect.ModifiedBy = Guid.NewGuid().ToString();
+            var parameters = new DynamicParameters();
+            parameters.Add("ArchitectId", architect.ArchitectId, DbType.Guid);
+            parameters.Add("ArchitectName", architect.ArchitectName, DbType.String);
+            parameters.Add("IsActive", architect.IsActive, DbType.Boolean);
+            parameters.Add("CreatedDate", architect.CreatedDate, DbType.DateTime);
+            parameters.Add("ModifiedDate", architect.ModifiedDate, DbType.DateTime);
+            parameters.Add("CreatedBy", architect.CreatedBy, DbType.Guid);
+            parameters.Add("ModifiedBy", architect.ModifiedBy, DbType.Guid);
+            using (var connection = _context.CreateConnection())
+            {
+                var createdArchitect = await connection.ExecuteAsync("SP_InsertArchitect", parameters, commandType: CommandType.StoredProcedure);
+                if (createdArchitect == 1)
+                {
+                    res = true;
+                }
+            }
+            return res;
+        }
+
+        public async Task<IEnumerable<Architect>> GetAllArchitect()
+        {
+            using (var connection = _context.CreateConnection())
+            {
+                var feesList = await connection.QueryAsync<Architect>("SP_GetAllArchitects", commandType: CommandType.StoredProcedure);
+                return feesList.ToList();
+            }
+        }
+
+        public async Task<bool> CreateServices(ServicesOffered services)
+        {
+            var res = false;
+            services.ServiceId = Guid.NewGuid().ToString();
+            services.CreatedBy = Guid.NewGuid().ToString();
+            services.ModifiedBy = Guid.NewGuid().ToString();
+            var parameters = new DynamicParameters();
+            parameters.Add("ServiceId", services.ServiceId, DbType.Guid);
+            parameters.Add("ServiceName", services.ServiceName, DbType.String);
+            parameters.Add("IsActive", services.IsActive, DbType.Boolean);
+            parameters.Add("CreatedDate", services.CreatedDate, DbType.DateTime);
+            parameters.Add("ModifiedDate", services.ModifiedDate, DbType.DateTime);
+            parameters.Add("CreatedBy", services.CreatedBy, DbType.Guid);
+            parameters.Add("ModifiedBy", services.ModifiedBy, DbType.Guid);
+            using (var connection = _context.CreateConnection())
+            {
+                var createdServices = await connection.ExecuteAsync("SP_InsertServices", parameters, commandType: CommandType.StoredProcedure);
+                if (createdServices == 1)
+                {
+                    res = true;
+                }
+            }
+            return res;
+        }
+
+        public async Task<IEnumerable<ServicesOffered>> GetAllServices()
+        {
+            using (var connection = _context.CreateConnection())
+            {
+                var feesList = await connection.QueryAsync<ServicesOffered>("SP_GetAllServices", commandType: CommandType.StoredProcedure);
+                return feesList.ToList();
+            }
         }
 
         public async Task<IEnumerable<LocationsViewModel>> GetAllMasterData()

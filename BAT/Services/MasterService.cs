@@ -124,6 +124,28 @@ namespace BuildWolf.BAT.Services
         {
             return await _masterDataRepo.GetAllMasterData();
         }
+
+        public async Task<bool> CreateArchitect(Architect architect)
+        {
+            return await _masterDataRepo.CreateArchitect(architect);
+        }
+
+        public async Task<IEnumerable<Architect>> GetAllArchitect()
+        {
+            return await _masterDataRepo.GetAllArchitect();
+        }
+
+        public async Task<bool> CreateServices(ServicesOffered services)
+        {
+            return await _masterDataRepo.CreateServices(services);
+        }
+
+        public async Task<IEnumerable<ServicesOffered>> GetAllServices()
+        {
+            return await _masterDataRepo.GetAllServices();
+        }
+
+
     }
 
 }

@@ -2,6 +2,8 @@
 using BuildWolf.Modules.UserModules;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BuildWolf.Controllers
@@ -18,7 +20,7 @@ namespace BuildWolf.Controllers
 
         [HttpPost]
         [Route("CreateUserArchitectWorked")]
-        public async Task<IActionResult> CreateUserArchitectWorked(UserArchitectWorkedMapping mapping)
+        public async Task<IActionResult> CreateUserArchitectWorked(List<UserArchitectWorkedMapping> mapping)
         {
             try
             {
@@ -64,7 +66,7 @@ namespace BuildWolf.Controllers
 
         [HttpDelete]
         [Route("DeleteUserArchitectWorked")]
-        public async Task<IActionResult> DeleteUserArchitectWorked(Guid id)
+        public async Task<IActionResult> DeleteUserArchitectWorked(List<string> id)
         {
             try
             {
@@ -87,7 +89,7 @@ namespace BuildWolf.Controllers
 
         [HttpPost]
         [Route("CreateUserProjectWorked")]
-        public async Task<IActionResult> CreateUserProjectWorked(UserProjectMapping userProjectMapping)
+        public async Task<IActionResult> CreateUserProjectWorked(List<UserProjectMapping> userProjectMapping)
         {
             try
             {
@@ -153,7 +155,7 @@ namespace BuildWolf.Controllers
 
         [HttpDelete]
         [Route("DeleteUserProject")]
-        public async Task<IActionResult> DeleteUserProject(Guid id)
+        public async Task<IActionResult> DeleteUserProject(List<string> id)
         {
             try
             {
@@ -265,12 +267,12 @@ namespace BuildWolf.Controllers
 
         [HttpPost]
         [Route("CreateUserService")]
-        public async Task<IActionResult> CreateUserService(UserServiceMapping userServiceMapping)
+        public async Task<IActionResult> CreateUserService(List<UserServiceMapping> userServiceMapping)
         {
             try
             {
                 var res = await _searchUserPage.CreateUserServiceMapping(userServiceMapping);
-                if (res)
+                if (res != null)
                 {
                     return StatusCode(200, res);
                 }
@@ -331,7 +333,7 @@ namespace BuildWolf.Controllers
 
         [HttpDelete]
         [Route("DeleteUserService")]
-        public async Task<IActionResult> DeleteUserService(Guid id)
+        public async Task<IActionResult> DeleteUserService(List<string> id)
         {
             try
             {
@@ -351,6 +353,98 @@ namespace BuildWolf.Controllers
             }
 
         }
+
+        //for UserServeyModel
+        [HttpPost]
+        [Route("CreateUserServey")]
+        public async Task<IActionResult> CreateUserSurvey(UserServeyModel UserSurvey, int pageNo)
+        {
+            try
+            {
+                var res = await _searchUserPage.CreateUserSurvey(UserSurvey, pageNo);
+                if (res != null)
+                {
+                    return StatusCode(200, res);
+                }
+                else
+                {
+                    return BadRequest("Not inserted response " + res);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetUserServey")]
+        public async Task<IActionResult> GetUserSurvey()
+        {
+            try
+            {
+                var res = await _searchUserPage.GetUserSurvey();
+                if (res != null)
+                {
+                    return StatusCode(200, res);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("UpdateUserServey")]
+        public async Task<IActionResult> UpdateUserSurvey(UserServeyModel UserSurvey)
+        {
+            try
+            {
+                var res = await _searchUserPage.UpdateUserSurvey(UserSurvey);
+                if (res != null)
+                {
+                    return StatusCode(200, res);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("DeleteUserServey")]
+        public async Task<IActionResult> DeleteUserSurvey(Guid id)
+        {
+            try
+            {
+                var res = await _searchUserPage.DeleteUserSurvey(id);
+                if (res)
+                {
+                    return StatusCode(200, res);
+                }
+                else
+                {
+                    return BadRequest("Not found");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+
 
     }
 }

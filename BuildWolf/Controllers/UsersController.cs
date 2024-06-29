@@ -25,7 +25,7 @@ namespace BuildWolf.Controllers
             try
             {
                 var res = await _userService.CreateUser(user);
-                if (res)
+                if (res != null)
                 {
                     return StatusCode(200, res);
                 }

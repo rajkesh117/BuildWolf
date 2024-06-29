@@ -12,7 +12,7 @@ namespace BuildWolf.DAT.RepoInterfaces
     {
         public Task<IEnumerable<Users>> GetAllUsers();
         public Task<Users> GetUserById(Guid id);
-        public Task<bool> CreateUser(Users user);
+        public Task<Users> CreateUser(Users user);
         public Task<Users> UpdateUser(Users user);
         public Task<bool> DeleteUser(Guid id);
 

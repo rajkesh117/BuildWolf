@@ -20,13 +20,14 @@ namespace BuildWolf.DAT.RepoServices
             _context = context;
         }
 
-        public async Task<bool> CreateUser(Users user)
+        public async Task<Users> CreateUser(Users user)
         {
-
             var res = false;
             user.UserId = Guid.NewGuid().ToString();
             user.CreatedBy = Guid.NewGuid().ToString();
             user.ModifiedBy = Guid.NewGuid().ToString();
+            user.CreatedDate = DateTime.Now;
+            user.ModifiedDate = DateTime.Now;
 
             var parameters = new DynamicParameters();
             parameters.Add("UserId", user.UserId, DbType.Guid);
@@ -36,6 +37,7 @@ namespace BuildWolf.DAT.RepoServices
             parameters.Add("MobileNo", user.MobileNo, DbType.String);
             parameters.Add("WebsiteUrl", user.WebsiteUrl, DbType.String);
             parameters.Add("UserTypeId", user.UserTypeId, DbType.Int32);
+            parameters.Add("ChargesType", user.ChargesType, DbType.String);
             parameters.Add("Charges", user.Charges, DbType.String);
             parameters.Add("Experience", user.Experience, DbType.String);
             parameters.Add("IsActive", user.IsActive, DbType.Boolean);
@@ -45,44 +47,46 @@ namespace BuildWolf.DAT.RepoServices
             parameters.Add("ModifiedBy", user.ModifiedBy, DbType.Guid);
             parameters.Add("Occupation", user.Occupation, DbType.String);
             parameters.Add("Rating", user.Rating, DbType.Int32);
+            parameters.Add("LocationId", user.LocationId, DbType.String);
 
-            using (var connection = _context.CreateConnection())
+            try
             {
-                var createdUser = await connection.ExecuteAsync("SP_InsertUser", parameters, commandType: CommandType.StoredProcedure);
-                if (createdUser == 1)
+                var getUser = new Users();
+                using (var connection = _context.CreateConnection())
                 {
-                    foreach (var item in user.UserCustomer)
+                    var userDataByEmail = new DynamicParameters();
+                    userDataByEmail.Add("p_EmailAddress", user.EmailAddress, DbType.String);
+                    try
                     {
-                        item.UserCustomerMappingId = Guid.NewGuid().ToString();
-                        item.UserId = user.UserId;
-                        item.CreatedBy = user.CreatedBy;
-                        item.ModifiedBy = user.ModifiedBy;
-                        var par = new DynamicParameters();
-                        par.Add("UserCustomerMappingId", item.UserCustomerMappingId, DbType.Guid);
-                        par.Add("UserId", item.UserId, DbType.Guid);
-                        par.Add("CustomerName", item.CustomerName, DbType.String);
-                        par.Add("ContactNo", item.ContactNo, DbType.String);
-                        par.Add("IsActive", user.IsActive, DbType.Boolean);
-                        par.Add("CreatedDate", user.CreatedDate, DbType.DateTime);
-                        par.Add("ModifiedDate", user.ModifiedDate, DbType.DateTime);
-                        par.Add("CreatedBy", user.CreatedBy, DbType.Guid);
-                        par.Add("ModifiedBy", user.ModifiedBy, DbType.Guid);
-
-                        try
+                        getUser = await connection.QuerySingleAsync<Users>("SP_GetUserByEmailId", userDataByEmail, commandType: CommandType.StoredProcedure);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                    finally
+                    {
+                        if (getUser.UserId != null)
                         {
-                            var customerAdded = await connection.ExecuteAsync("SP_InsertUserCustomer", par, commandType: CommandType.StoredProcedure);
+                            user.UserId = null;
+                            res = true;
                         }
-                        catch (Exception ex)
+                        if (user.UserId != null)
                         {
-                            return false;
+                            var createdUser = await connection.ExecuteAsync("SP_InsertUser", parameters, commandType: CommandType.StoredProcedure);
+                            if (createdUser == 1) res = true;
                         }
 
                     }
+                    if (res) return user;
                 }
-                res = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
             }
 
-            return res;
+            return null;
 
         }
 
@@ -107,9 +111,36 @@ namespace BuildWolf.DAT.RepoServices
             }
         }
 
-        public Task<Users> UpdateUser(Users user)
+        public async Task<Users> UpdateUser(Users user)
         {
-            throw new NotImplementedException();
+            var parameters = new DynamicParameters();
+            parameters.Add("p_UserId", user.UserId, DbType.Guid);
+            parameters.Add("p_UserName", user.UserName, DbType.String);
+            parameters.Add("p_BusinessName", user.BusinessName, DbType.String);
+            parameters.Add("p_EmailAddress", user.EmailAddress, DbType.String);
+            parameters.Add("p_MobileNo", user.MobileNo, DbType.String);
+            parameters.Add("p_WebsiteUrl", user.WebsiteUrl, DbType.String);
+            parameters.Add("p_UserTypeId", user.UserTypeId, DbType.Int32);
+            parameters.Add("p_ChargesType", user.ChargesType, DbType.String);
+            parameters.Add("p_Charges", user.Charges, DbType.String);
+            parameters.Add("p_Experience", user.Experience, DbType.String);
+            parameters.Add("p_IsActive", user.IsActive, DbType.Boolean);
+            parameters.Add("p_CreatedDate", user.CreatedDate, DbType.DateTime);
+            parameters.Add("p_ModifiedDate", user.ModifiedDate, DbType.DateTime);
+            parameters.Add("p_CreatedBy", user.CreatedBy, DbType.Guid);
+            parameters.Add("p_ModifiedBy", user.ModifiedBy, DbType.Guid);
+            parameters.Add("p_Occupation", user.Occupation, DbType.String);
+            parameters.Add("p_Rating", user.Rating, DbType.Int32);
+            parameters.Add("p_LocationId", user.LocationId, DbType.String);
+            using (var connection = _context.CreateConnection())
+            {
+                var users = await connection.ExecuteAsync("SP_UpdatetUser", parameters, commandType: CommandType.StoredProcedure);
+                if (users == 1)
+                {
+                    return user;
+                }
+            }
+            return null;
         }
 
         public async Task<bool> DeleteUser(Guid id)

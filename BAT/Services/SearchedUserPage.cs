@@ -125,6 +125,7 @@ namespace BuildWolf.BAT.Services
             user.EmailAddress = userServeyModel.EmailAddress.ToLower();
             user.MobileNo = userServeyModel.MobileNo;
             user.LocationId = userServeyModel.LocationId;
+            user.UserTypeId = userServeyModel.UserTypeId;
             if (userServeyModel.UserId == null && pageNo == 1)
             {
                 user = await _userService.CreateUser(user).ConfigureAwait(false);
